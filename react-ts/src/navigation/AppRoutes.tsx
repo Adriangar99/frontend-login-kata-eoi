@@ -1,11 +1,11 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { UserService } from "../modules/auth/UserService.ts";
 import { Login } from "../pages/Login";
 import { Recipes } from "../pages/Recipes";
+import { UserServiceFetch } from "../modules/auth/UserServiceFetch.ts";
 
 export const AppRoutes = () => {
   const navigate = useNavigate();
-  const userService = new UserService();
+  const userService = new UserServiceFetch();
 
   return (
     <Routes>
