@@ -4,17 +4,21 @@ import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
-import type { TokenService } from "../modules/auth/TokenService.ts";
+import type { TokenRepository } from "../modules/auth/TokenRepository.ts";
 import type { UserService } from "../modules/auth/UserService.ts";
 import { translateError } from "../utils/translateError.js";
 
 type LoginProps = {
   navigate: (path: string) => void;
   userService: UserService;
-  tokenService: TokenService;
+  tokenRepository: TokenRepository;
 };
 
-export const Login = ({ navigate, userService, tokenService }: LoginProps) => {
+export const Login = ({
+  navigate,
+  userService,
+  tokenRepository,
+}: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -31,7 +35,7 @@ export const Login = ({ navigate, userService, tokenService }: LoginProps) => {
 
     userService
       .login(email, password)
-      .then((payload) => tokenService.setToken(payload.jwt))
+      .then((payload) => tokenRepository.save(payload.jwt))
       .then(() => {
         navigate("/recipes");
       })
