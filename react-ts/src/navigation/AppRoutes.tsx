@@ -1,13 +1,18 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { TokenRepositoryLocalStorage } from "../modules/auth/TokenRepositoryLocalStorage.ts";
 import { Login } from "../pages/Login";
 import { Recipes } from "../pages/Recipes";
-import { UserServiceFetch } from "../modules/auth/UserServiceFetch.ts";
+import { container } from "../di/container.ts";
+import { Tokens } from "../di/Tokens.ts";
+import { UserService } from "../modules/auth/UserService.ts";
+import { TokenRepository } from "../modules/auth/TokenRepository.ts";
 
 export const AppRoutes = () => {
   const navigate = useNavigate();
-  const userService = new UserServiceFetch();
-  const tokenRepository = new TokenRepositoryLocalStorage();
+
+  const userService: UserService = container.get(Tokens.USER_SERVICE);
+  const tokenRepository: TokenRepository = container.get(
+    Tokens.TOKEN_REPOSITORY
+  );
 
   return (
     <Routes>

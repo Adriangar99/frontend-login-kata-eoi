@@ -1,6 +1,12 @@
-import { Container, type interfaces } from "inversify";
+import { Container } from "inversify";
 import { Tokens } from "./Tokens";
+import { TokenRepositoryLocalStorage } from "../modules/auth/TokenRepositoryLocalStorage";
+import { UserServiceFetch } from "../modules/auth/UserServiceFetch";
 
-const container = new Container();
+export const container = new Container();
 
-// container.bind(Tokens.STORAGE_SERVICE).toDynamicValue();
+container
+  .bind(Tokens.TOKEN_REPOSITORY)
+  .toDynamicValue(TokenRepositoryLocalStorage.fromContainer);
+
+container.bind(Tokens.USER_SERVICE).toConstantValue(new UserServiceFetch());
