@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Login.css";
+import type { UserService } from "../modules/auth/UserService.ts";
 import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
@@ -8,9 +9,10 @@ import { translateError } from "../utils/translateError.js";
 
 type LoginProps = {
   navigate: (path: string) => void;
+  userService: UserService;
 };
 
-export const Login = ({ navigate }: LoginProps) => {
+export const Login = ({ navigate, userService }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -29,20 +31,8 @@ export const Login = ({ navigate }: LoginProps) => {
           setIsLoading(true);
           setErrorMessage(null);
 
-          fetch("https://backend-login-placeholder.deno.dev/api/users/login", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.status === "error") {
-                throw new Error(data.code);
-              }
-              return data.payload;
-            })
+          userService
+            .login(email, password)
             .then((payload) => {
               localStorage.setItem("token", payload.jwt);
             })
