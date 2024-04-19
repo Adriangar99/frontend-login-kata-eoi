@@ -24,29 +24,28 @@ export const Login = ({ navigate, userService, tokenService }: LoginProps) => {
     setErrorMessage(null);
   }, [email, password]);
 
+  const onLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    userService
+      .login(email, password)
+      .then((payload) => tokenService.setToken(payload.jwt))
+      .then(() => {
+        navigate("/recipes");
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <main className="login-container">
-      <form
-        className="login-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          setIsLoading(true);
-          setErrorMessage(null);
-
-          userService
-            .login(email, password)
-            .then((payload) => tokenService.setToken(payload.jwt))
-            .then(() => {
-              navigate("/recipes");
-            })
-            .catch((error) => {
-              setErrorMessage(error.message);
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
-        }}
-      >
+      <form className="login-form" onSubmit={onLogin}>
         <Title>Login with email</Title>
         <p>Enter your email address to login with your account.</p>
 
