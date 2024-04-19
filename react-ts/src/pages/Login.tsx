@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import "./Login.css";
-import type { UserService } from "../modules/auth/UserService.ts";
 import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
+import type { TokenService } from "../modules/auth/TokenService.ts";
+import type { UserService } from "../modules/auth/UserService.ts";
 import { translateError } from "../utils/translateError.js";
 
 type LoginProps = {
   navigate: (path: string) => void;
   userService: UserService;
+  tokenService: TokenService;
 };
 
-export const Login = ({ navigate, userService }: LoginProps) => {
+export const Login = ({ navigate, userService, tokenService }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -33,9 +35,7 @@ export const Login = ({ navigate, userService }: LoginProps) => {
 
           userService
             .login(email, password)
-            .then((payload) => {
-              localStorage.setItem("token", payload.jwt);
-            })
+            .then((payload) => tokenService.setToken(payload.jwt))
             .then(() => {
               navigate("/recipes");
             })
