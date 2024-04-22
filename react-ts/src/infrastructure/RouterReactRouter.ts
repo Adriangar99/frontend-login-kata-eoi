@@ -10,8 +10,8 @@ export class RouterReactRouter implements Router {
     this.navigate = navigate;
   }
 
-  static fromContainer({ container }: interfaces.Context) {
-    return new RouterReactRouter(container.get(Tokens.REACT_ROUTER));
+  static async fromContainer({ container }: interfaces.Context) {
+    return new RouterReactRouter(await container.getAsync(Tokens.REACT_ROUTER));
   }
 
   goToRecipes(): void {

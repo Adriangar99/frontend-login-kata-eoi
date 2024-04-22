@@ -21,7 +21,7 @@ describe("Login", () => {
 
     const loginUseCase = new LoginUseCase(userService, tokenRepository, router);
 
-    render(<Login loginUseCase={loginUseCase} />);
+    render(<Login />);
 
     await user.type(
       screen.getByLabelText("Your email"),

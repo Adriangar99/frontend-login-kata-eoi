@@ -5,13 +5,12 @@ import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
 import { translateError } from "../utils/translateError.js";
+import { useDependencies } from "../infrastructure/DependenciesContext.tsx";
 import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
+import { Tokens } from "../di/Tokens.ts";
 
-type LoginProps = {
-  loginUseCase: LoginUseCase;
-};
-
-export const Login = ({ loginUseCase }: LoginProps) => {
+export const Login = () => {
+  const { container } = useDependencies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -26,7 +25,8 @@ export const Login = ({ loginUseCase }: LoginProps) => {
     setIsLoading(true);
     setErrorMessage(null);
 
-    loginUseCase
+    container
+      .get<LoginUseCase>(Tokens.LOGIN_USECASE)
       .execute({ email, password })
       .catch((error) => {
         setErrorMessage(error.message);

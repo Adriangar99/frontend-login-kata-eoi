@@ -3,4 +3,5 @@ export const enum Tokens {
   USER_SERVICE = "USER_SERVICE",
   ROUTER = "ROUTER",
   REACT_ROUTER = "REACT_ROUTER",
+  LOGIN_USECASE = "LOGIN_USECASE",
 }
