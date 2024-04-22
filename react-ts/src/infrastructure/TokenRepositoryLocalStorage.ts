@@ -1,4 +1,4 @@
-import { TokenRepository } from "./TokenRepository";
+import { TokenRepository } from "../domain/TokenRepository";
 import type { interfaces } from "inversify";
 
 export class TokenRepositoryLocalStorage implements TokenRepository {

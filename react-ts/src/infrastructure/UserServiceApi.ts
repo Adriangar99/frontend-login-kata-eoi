@@ -1,6 +1,6 @@
-import { LoginResponse, UserService } from "./UserService";
+import { LoginResponse, UserService } from "../domain/UserService";
 
-export class UserServiceFetch implements UserService {
+export class UserServiceApi implements UserService {
   login = async (email: string, password: string): Promise<LoginResponse> => {
     const data = await fetch(
       "https://backend-login-placeholder.deno.dev/api/users/login",

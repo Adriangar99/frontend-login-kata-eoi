@@ -3,24 +3,27 @@ import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { UserServiceFake } from "../modules/auth/UserServiceFake.ts";
 import { Login } from "./Login";
-import { TokenRepository } from "../modules/auth/TokenRepository.ts";
+import { TokenRepository } from "../domain/TokenRepository.ts";
+import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
+import { Router } from "../domain/Router.ts";
 
 describe("Login", () => {
   it("redirects to recipe page after login", async () => {
     const user = userEvent.setup();
-    const navigate = vi.fn();
     const userService = new UserServiceFake();
     const tokenRepository: TokenRepository = {
       save: vi.fn(),
     };
 
-    render(
-      <Login
-        navigate={navigate}
-        userService={userService}
-        tokenRepository={tokenRepository}
-      />
-    );
+    const goToRecipes = vi.fn();
+
+    const router: Router = {
+      goToRecipes,
+    };
+
+    const loginUseCase = new LoginUseCase(userService, tokenRepository, router);
+
+    render(<Login loginUseCase={loginUseCase} />);
 
     await user.type(
       screen.getByLabelText("Your email"),
@@ -30,7 +33,7 @@ describe("Login", () => {
     await user.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith("/recipes");
+      expect(goToRecipes).toHaveBeenCalledWith("/recipes");
     });
   });
 });
