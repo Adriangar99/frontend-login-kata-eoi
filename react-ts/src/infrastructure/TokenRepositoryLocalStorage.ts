@@ -1,8 +1,7 @@
 import { TokenRepository } from "../domain/TokenRepository";
-import type { interfaces } from "inversify";
 
 export class TokenRepositoryLocalStorage implements TokenRepository {
-  static fromContainer({ container }: interfaces.Context) {
+  static fromContainer() {
     return new TokenRepositoryLocalStorage();
   }
 

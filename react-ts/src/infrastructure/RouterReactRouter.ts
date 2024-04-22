@@ -1,11 +1,17 @@
 import { NavigateFunction } from "react-router-dom";
 import { Router } from "../domain/Router";
+import { interfaces } from "inversify";
+import { Tokens } from "../di/Tokens";
 
 export class RouterReactRouter implements Router {
   private navigate: NavigateFunction;
 
   constructor(navigate: NavigateFunction) {
     this.navigate = navigate;
+  }
+
+  static fromContainer({ container }: interfaces.Context) {
+    return new RouterReactRouter(container.get(Tokens.REACT_ROUTER));
   }
 
   goToRecipes(): void {

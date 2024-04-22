@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { UserServiceFake } from "../modules/auth/UserServiceFake.ts";
+import { UserServiceFake } from "../infrastructure/UserServiceFake.ts";
 import { Login } from "./Login";
 import { TokenRepository } from "../domain/TokenRepository.ts";
 import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
@@ -14,9 +14,7 @@ describe("Login", () => {
     const tokenRepository: TokenRepository = {
       save: vi.fn(),
     };
-
     const goToRecipes = vi.fn();
-
     const router: Router = {
       goToRecipes,
     };
@@ -33,7 +31,7 @@ describe("Login", () => {
     await user.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(() => {
-      expect(goToRecipes).toHaveBeenCalledWith("/recipes");
+      expect(goToRecipes).toHaveBeenCalled();
     });
   });
 });

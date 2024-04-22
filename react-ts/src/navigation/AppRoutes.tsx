@@ -6,16 +6,21 @@ import { Tokens } from "../di/Tokens.ts";
 import { UserService } from "../domain/UserService.ts";
 import { TokenRepository } from "../domain/TokenRepository.ts";
 import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
-import { RouterReactRouter } from "../infrastructure/RouterReactRouter.ts";
+import { Router } from "../domain/Router.ts";
+import { useEffect } from "react";
 
 export const AppRoutes = () => {
   const navigate = useNavigate();
-  const userService: UserService = container.get(Tokens.USER_SERVICE);
-  const tokenRepository: TokenRepository = container.get(
+
+  useEffect(() => {
+    container.bind(Tokens.REACT_ROUTER).toConstantValue(navigate);
+  }, []);
+
+  const userService = container.get<UserService>(Tokens.USER_SERVICE);
+  const tokenRepository = container.get<TokenRepository>(
     Tokens.TOKEN_REPOSITORY
   );
-  const router = new RouterReactRouter(navigate);
-
+  const router = container.get<Router>(Tokens.ROUTER);
   const loginUseCase = new LoginUseCase(userService, tokenRepository, router);
 
   return (
