@@ -1,27 +1,46 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
-import { UserServiceFake } from "../infrastructure/UserServiceFake.ts";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { Login } from "./Login";
-import { TokenRepository } from "../domain/TokenRepository.ts";
-import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
-import { Router } from "../domain/Router.ts";
+import { Container } from "inversify";
+import { Tokens } from "../di/Tokens";
+import { UserServiceFake } from "../infrastructure/UserServiceFake";
+import { TokenRepository } from "../domain/TokenRepository";
+import { Router } from "../domain/Router";
+import { LoginUseCase } from "../use-cases/LoginUseCase";
+import { DependenciesProvider } from "../infrastructure/DependenciesContext";
 
 describe("Login", () => {
+  const testContainer = new Container();
+  const goToRecipes = vi.fn();
+  const router: Router = {
+    goToRecipes,
+  };
+  const tokenRepository: TokenRepository = {
+    save: vi.fn(),
+  };
+
+  beforeEach(() => {
+    testContainer.bind(Tokens.ROUTER).toConstantValue(router);
+    testContainer
+      .bind(Tokens.TOKEN_REPOSITORY)
+      .toConstantValue(tokenRepository);
+    testContainer
+      .bind(Tokens.USER_SERVICE)
+      .toConstantValue(new UserServiceFake());
+    testContainer
+      .bind(Tokens.LOGIN_USECASE)
+      .toDynamicValue(LoginUseCase.fromContainer);
+  });
+
   it("redirects to recipe page after login", async () => {
     const user = userEvent.setup();
-    const userService = new UserServiceFake();
-    const tokenRepository: TokenRepository = {
-      save: vi.fn(),
-    };
-    const goToRecipes = vi.fn();
-    const router: Router = {
-      goToRecipes,
-    };
 
-    const loginUseCase = new LoginUseCase(userService, tokenRepository, router);
-
-    render(<Login />);
+    render(
+      <DependenciesProvider dependencies={{ container: testContainer }}>
+        <Login />
+      </DependenciesProvider>
+    );
 
     await user.type(
       screen.getByLabelText("Your email"),

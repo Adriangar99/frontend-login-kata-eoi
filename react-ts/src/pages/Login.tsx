@@ -6,8 +6,8 @@ import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
 import { translateError } from "../utils/translateError.js";
 import { useDependencies } from "../infrastructure/DependenciesContext.tsx";
-import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
 import { Tokens } from "../di/Tokens.ts";
+import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
 
 export const Login = () => {
   const { container } = useDependencies();

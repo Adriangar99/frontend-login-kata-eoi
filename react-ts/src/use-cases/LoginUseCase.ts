@@ -11,12 +11,12 @@ export class LoginUseCase {
     private readonly router: Router
   ) {}
 
-  async fromContainer({ container }: interfaces.Context) {
+  static fromContainer({ container }: interfaces.Context) {
     const userService = container.get<UserService>(Tokens.USER_SERVICE);
     const tokenRepository = container.get<TokenRepository>(
       Tokens.TOKEN_REPOSITORY
     );
-    const router = await container.getAsync<Router>(Tokens.ROUTER);
+    const router = container.get<Router>(Tokens.ROUTER);
 
     return new LoginUseCase(userService, tokenRepository, router);
   }
