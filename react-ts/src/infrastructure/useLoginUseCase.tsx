@@ -4,5 +4,8 @@ import { LoginUseCase } from "../use-cases/LoginUseCase.ts";
 
 export const useLoginUseCase = () => {
   const { container } = useDependencies();
-  return container.get<LoginUseCase>(Tokens.LOGIN_USECASE);
+  return (email: string, password: string) =>
+    container
+      .get<LoginUseCase>(Tokens.LOGIN_USECASE)
+      .execute({ email, password });
 };

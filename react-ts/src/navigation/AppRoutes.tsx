@@ -5,7 +5,7 @@ import { DependenciesProvider } from "../infrastructure/DependenciesContext.tsx"
 import { Login } from "../pages/Login.tsx";
 import { Recipes } from "../pages/Recipes.tsx";
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
