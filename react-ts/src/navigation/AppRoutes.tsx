@@ -1,28 +1,31 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { Login } from "../pages/Login";
-import { Recipes } from "../pages/Recipes";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { container } from "../di/container.ts";
 import { Tokens } from "../di/Tokens.ts";
-import { useEffect } from "react";
 import { DependenciesProvider } from "../infrastructure/DependenciesContext.tsx";
+import { Login } from "../pages/Login.tsx";
+import { Recipes } from "../pages/Recipes.tsx";
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/recipes",
+    element: <Recipes />,
+  },
+]);
+
+container.bind(Tokens.REACT_ROUTER).toConstantValue(router);
 
 export const AppRoutes = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    container.bind(Tokens.REACT_ROUTER).toConstantValue(navigate);
-  }, []);
-
   return (
     <DependenciesProvider
       dependencies={{
         container,
       }}
     >
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/recipes" element={<Recipes />} />
-      </Routes>
+      <RouterProvider router={router} />
     </DependenciesProvider>
   );
 };
