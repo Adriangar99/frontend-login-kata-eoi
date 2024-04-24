@@ -1,0 +1,12 @@
+### GET request to example server
+POST https://backend-login-placeholder.deno.dev/api/v2/recipes
+Content-Type: 'application/json'
+api_token: 26df07b5b7318455b8ca09f923eaae6de6eb95530743eddcfdb541df9487df9d
+
+
+{ "id": "1234",
+      "name": "pizza",
+      "ingredients": ["piña"],
+    }
+
+###
